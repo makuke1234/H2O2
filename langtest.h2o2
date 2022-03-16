@@ -1,0 +1,8 @@
+sub main
+{
+	var bass = 255.5
+	var a = 5*5 + (5 + 1)*2 * 0.12
+	print "bass value: " + str(bass) + "; " + str(val("5")-4)+" "+str(a)+" " + ab
+}
+
+main ab = "nipi-tiri"

@@ -6,7 +6,7 @@
 <statement> ::= <functionop>
 | ("if" <boolexpression> <block> ["else" <block>])
 | ("while" <boolexpression> <block>)
-| ("for" [<variableop>] "," [<boolexpression>] "," <block>)
+| ("for" [<variableop>] "," [<boolexpression>] "," [<variabledef>] "," <block>)
 | "break"
 | "continue"
 | <variableop>
@@ -19,7 +19,7 @@
 
 <functiondecl> ::= "sub" <identifier>
 <functiondef> ::= <functiondecl> <block>
-<functioncall> ::= <identifier> [<expression> ["," <expression>]*]
+<functioncall> ::= <identifier> [<variabledef> ["," <variabledef>]*]
 
 
 <variableop> ::= <variabledecl> | <variabledef>
