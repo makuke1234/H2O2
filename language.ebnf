@@ -10,9 +10,6 @@
 | "break"
 | "continue"
 | <variableop>
-| ("goto" <label>)
-
-<label> ::= <identifier> ':'
 
 
 <functionop> ::= <functiondecl> | <functiondef> | <functioncall>

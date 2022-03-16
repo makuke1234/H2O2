@@ -296,8 +296,6 @@ def Statement(act, cont):
 		DoBreak(act)
 	elif TakeString("continue"):
 		DoContinue(act, cont)
-	elif TakeString("goto"):
-		DoGoto(act, cont)
 	elif TakeString("sub"):
 		DoSubDef()
 	else:
@@ -390,16 +388,6 @@ def DoContinue(act, cont):
 	if act[0]:
 		cont[0] = True
 
-def DoGoto(act, cont):
-	global pc, variable
-	ident = TakeNextAlNum()
-
-	if ident not in variable or variable[ident][0] != 'l':
-		Error("Unknown label")
-	
-	pc = variable[ident][1]
-	Block(act, cont)
-
 def DoSubOp(act, cont):
 	if not TakeString("sub"):
 		sub = [False]
@@ -465,12 +453,7 @@ def DoVarOp(act, cont):
 def DoAssign(act, cont):
 	global variable
 	ident = TakeNextAlNum()
-	if TakeNext(':'):
-		if ident not in variable:
-			variable[ident] = ('l', pc)
-		else:
-			Error("Duplicated label")
-	elif not TakeNext('=') or ident == "":
+	if not TakeNext('=') or ident == "":
 		Error("uknown statement")
 	e = Expression(act, cont)
 	if (act[0] and not cont[0]) or ident not in variable:
