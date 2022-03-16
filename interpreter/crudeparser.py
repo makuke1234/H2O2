@@ -120,13 +120,13 @@ def BooleanFactor(act, cont):
 def BooleanTerm(act, cont):
 	b = BooleanFactor(act, cont)
 	while TakeNext('&'):
-		b = b & BooleanFactor(act)
+		b = b & BooleanFactor(act, cont)
 	return b
 
 def BooleanExpression(act, cont):
 	b = BooleanTerm(act, cont)
 	while TakeNext('|'):
-		b = b | BooleanTerm(act)
+		b = b | BooleanTerm(act, cont)
 	return b
 
 def MathFactor(act, cont):
@@ -336,37 +336,50 @@ def DoWhile(act, cont):
 def DoFor(act, cont):
 	Next()
 	if not TakeNext(','):
-		DoVarOp(act)
-		Next()
-		if TakeNext(','):
-			Error("Unknown for-loop")
+		DoVarOp(act, cont)
+		TakeNext(',')
 	
 	Next()
-	bexp = True
-	if TakeNext(','):
-		bexp = False
 
 	global pc
 	local = [act[0]]
 	localCont = [cont[0]]
 	pc_for = pc
 
+
+	bexp = True
+	if TakeNext(','):
+		bexp = False
+
+
 	while not TakeNext(','):
 		Take()
+	
 
+	Next()
 	local2 = [act[0]]
 	local2Cont = [cont[0]]
 	pc_assign = pc
 
+	DoAssign([False], [False])
+	pc_block = pc
+
 	pc = pc_for
+
 	while (bexp and BooleanExpression(local, localCont)) or not bexp:
 		localCont[0] = False
+		pc = pc_block
+
 		Block(local, localCont)
+		
 		pc = pc_assign
 		DoAssign(local2, local2Cont)
+		
 		pc = pc_for
 
-	Block([False])
+	pc = pc_block
+
+	Block([False], cont)
 
 
 def DoBreak(act):
@@ -406,9 +419,11 @@ def DoSubDef():
 
 def DoSubCall(act, cont, sub):
 	global pc, variable
+	prevpc = pc
 	funident = TakeNextAlNum()
 	if funident not in variable or variable[funident][0] != 'p':
 		sub[0] = False
+		pc = prevpc
 		return
 	sub[0] = True
 
@@ -416,15 +431,13 @@ def DoSubCall(act, cont, sub):
 
 	# Set up function argument as variables
 	while True:
+		if not TakeNext(','):
+			break
 		ident = TakeNextAlNum()
-		print("ident: '" + ident + "'")
 		if not TakeNext('=') or ident == "":
 			Error("No variable name given")
 
 		variable[ident] = Expression(act, cont)
-		print("new value: " + str(variable[ident][1]))
-		if not TakeNext(','):
-			break
 	
 	ret = pc
 	pc = variable[funident][1]
@@ -448,8 +461,6 @@ def DoVarOp(act, cont):
 
 		if (act[0] and not cont[0]) or ident not in variable:
 			variable[ident] = e
-		elif ident in variable:
-			Error("variable re-declaration")
 		
 def DoAssign(act, cont):
 	global variable
