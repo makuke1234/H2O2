@@ -64,7 +64,7 @@ def GetHexDigit(c):
 	if c >= '0' and c <= '9':
 		return ord(c) - ord('0')
 	else:
-		return ord(c) - ord('a') + 10
+		return ord(c.lower()) - ord('a') + 10
 
 def IsLowerAlpha(c):
 	return c >= 'a' and c <= 'z'
@@ -418,9 +418,7 @@ def DoSubCall(act, cont, sub):
 	localvariable = variable.copy()
 
 	# Set up function argument as variables
-	while True:
-		if not TakeNext(','):
-			break
+	while TakeNext(','):
 		ident = TakeNextAlNum()
 		if not TakeNext('=') or ident == "":
 			Error("No variable name given")
