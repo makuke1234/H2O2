@@ -5,6 +5,7 @@
 
 #include <istream>
 #include <ostream>
+#include <iostream>
 
 namespace h2o2
 {

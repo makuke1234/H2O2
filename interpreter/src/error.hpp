@@ -24,13 +24,21 @@ namespace h2o2
 		"Cannot open input file!"
 	};
 
-	void err(error code) noexcept;
+	void err(error code, const char * what) noexcept;
 	void err(std::string_view msg) noexcept;
-	[[nodiscard]] constexpr std::string_view errStr(error code) noexcept
+	[[nodiscard]] constexpr std::string_view errStr(error code, const char * what) noexcept
 	{
 		using underT = std::underlying_type_t<error>;
 		assert(underT(code) < underT(error::error_enum_size));
-		return g_errStrings[underT(code)];
+		
+		if (code == error::unknown)
+		{
+			return what;
+		}
+		else
+		{
+			return g_errStrings[underT(code)];
+		}
 	}
 
 }

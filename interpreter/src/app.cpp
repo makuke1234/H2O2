@@ -41,10 +41,10 @@ h2o2::app::app() noexcept
 	{
 		data.assign(app::readFile(this->arguments.getInputFile()));
 	}
-	catch (const std::exception &)
+	catch (const std::exception & e)
 	{
 		this->err = error::inputFile;
-		return 1;
+		throw e;
 	}
 
 	// Parse input
@@ -59,7 +59,7 @@ h2o2::app::app() noexcept
 		std::string contents;
 
 		in.seekg(0, std::ios::end);
-		contents.resize(in.tellg());
+		contents.resize(std::size_t(in.tellg()) + 1);
 		in.seekg(0, std::ios::beg);
 		in.read(contents.data(), contents.size());
 		in.close();
