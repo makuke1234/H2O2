@@ -2,14 +2,16 @@ var ab = ""
 
 sub main
 {
-	var temp = 255.5
-	var a = 5*5 + (5 + 1)*2 * 0.12
-	print "temp value: " + str(temp) + "; " + str(val("5")-4)+" "+str(a)+" "+ab+"\n"
+	# Kommentaar 1
+	var temp = 255.5	# Kommentaar 2
+	var a = 5 * 5 + (5 + 1)*2 * 0.12
+	print "temp value: " + str(temp) + "; " + str(val("5")-4)+" "+str(a)+" ab: "+ab+"\n"
 
-	for var i = 0b11010, i >= 0, i = i - 1
+	for var i = 0b1110, i >= 0, i = i - 1
 	{
 		print str(i) + "\n"
 	}
 }
 
-main, ab= input() # Kommentaar
+print "Enter ab's value: "
+main, ab= input() # Kommentaar 3
